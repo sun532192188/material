@@ -1,0 +1,22 @@
+﻿admin           管理员表----->如果要清除请保留admin数据
+category        商品分类----->根据你们需求决定是否清除
+goods           商品表----->根据你们需求决定是否清除
+role            角色表 -->保留第一条id为1 名称为 超级管理员数据
+function        功能表    ----> 不可清除
+rolefunction    角色功能表  --> 保留roleId 为1的数据
+department      部门表----->根据你们需求决定是否清除
+departplan      部门月计划表  ---> 清除
+materialapply   部门月计划物资表  -->清除
+departstock     部门库存      ---> 清除
+loginlog        可清除
+materialconsume 物资消耗表  -->清除
+materialconsumedetail  物资消耗明细表 -->清除
+operattemp      物资临时表  -->清除
+materialalloct  清除
+stock           库存表-->清除
+storage         入库表-->清除
+storagematerial 入库明细 -->清除
+supplier        供应商表 -->根据你们需求决定是否清除
+usealloct       出库表 -->清除
+usealloctdetail 出库明细表-->清除
+

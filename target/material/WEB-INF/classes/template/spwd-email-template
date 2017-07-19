@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>密码修改</title>
+</head>
+<body>
+亲爱的 &&&&&&&&&&：您好！
+<pre>
+    您收到这封这封电子邮件是因为您 (也可能是某人冒充您的名义) 申请了一个新的密码。假如这不是您本人所申请, 请不用理会这封电子邮件, 但是如果您持续收到这类的信件骚扰, 请您尽快联络管理员。
+    要修改新的密码, 请使用以下链接启用密码（若无法点击该地址，您可以复制到浏览器回车即可，链接使用后立即失效，有效期为24小时）。
+</pre>
+<div style="margin-left:35px;">
+	<a href="http://192.168.0.101/guest/guessPwd@@@@@@@@@@">
+    	http://192.168.0.101/guest/guessPwd@@@@@@@@@@
+	</a>
+	<pre>
+我们将一如既往、热忱的为您服务！
+云腾致用 - 专业的教育类APP推广平台
+<a href="http://www.yuntengzhiyong.com">联系我们</a>
+	</pre>
+</div>
+</body>
+</html>

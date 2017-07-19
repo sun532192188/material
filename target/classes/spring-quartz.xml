@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+    <!-- 任务计划 -->  
+    <!-- 要调用的工作 -->  
+    <bean id="timerAction" class="com.material.website.web.QuartzUtill"></bean>  
+      
+    <!-- 定义调用对象和调用对象的方法 -->  
+    <bean id="jobtask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+        <!-- 调用的类 -->  
+        <property name="targetObject">  
+            <ref bean="timerAction"/>  
+        </property>  
+        <!-- 调用类中的方法 -->  
+        <property name="targetMethod">  
+            <value>start</value>  
+        </property>  
+        <!-- 作业不并发调度 -->  
+        <property name="concurrent" value="false"/>  
+    </bean>  
+      
+    <!-- 定义触发时间 -->  
+    <bean id="doTime" class="org.springframework.scheduling.quartz.CronTriggerBean">  
+        <property name="jobDetail">  
+            <ref bean="jobtask"/>  
+        </property>  
+        <!-- cron表达式 -->  
+        <property name="cronExpression">  
+            <!-- 每天晚上11点59分钟59秒执行一次 -->  
+            <!-- <value>0 59 23 * * ?</value> -->  
+            <!-- 每天晚上12:00:00 执行-->  
+            <value>0 15 23 * * ?</value>  
+        </property>  
+    </bean>  
+      
+    <!-- 总管理类,如果将lazy-init='false'那么容器启动就会执行调度程序 -->  
+    <bean id="startQuertz" lazy-init="false" autowire="no" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+        <property name="triggers">  
+            <list>  
+                <ref bean="doTime"/>  
+            </list>  
+        </property>  
+    </bean> 
+</beans>

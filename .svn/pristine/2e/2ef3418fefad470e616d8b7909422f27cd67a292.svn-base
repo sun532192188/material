@@ -1,0 +1,5 @@
+search.host=192.168.0.200
+search.port=9300
+search.cluster=yuntengzhiyongsearch
+course.fields=name,intro,orgName
+commons.fields=name,title

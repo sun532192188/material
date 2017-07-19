@@ -1,0 +1,33 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta name="keywords" content="ajax,jquery,省市联动" />
+		<meta name="description" content="ijquery演示平台，演示XHTML、CSS、jquery、PHP案例和示例" />
+		<title>第74款插件：jquery.cityselect.js基于jQuery+JSON的省市联动效果</title>
+		<link rel="stylesheet" type="text/css" href="css/main.css" />
+		<style type="text/css">
+			.demo{width:80%; margin:20px auto}
+			.demo h3{height:32px; line-height:32px}
+			.demo p{line-height:24px}
+			pre{margin-top:10px; padding:6px; background:#f7f7f7}
+		</style>
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<script type="text/javascript" src="js/jquery.cityselect.js"></script>
+		<script type="text/javascript">
+			$(function(){
+				$("#city").citySelect({
+					nodata:"none",
+					required:false
+				}); 
+			});
+		</script>
+	</head>
+	<body>
+		<div id="city"> 
+			<select class="prov"></select>  
+			<select class="city" disabled="disabled"></select> 
+			<select class="dist" disabled="disabled"></select> 
+		</div> 
+	</body>
+</html>

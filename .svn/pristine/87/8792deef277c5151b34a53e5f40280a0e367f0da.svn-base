@@ -1,0 +1,154 @@
+﻿用户角色表       Role
+   编号          id
+   角色名称      roleName 
+   可操作功能    function
+
+用户表     User
+   编号      id
+   用户名    userName
+   真实名称  departmentName
+   密码      password
+   所属角色 role  1.采购 2.财务 3.使用   4 超级管理员
+     状态      remove     0 正常   1移除
+     
+ 功能表
+ 编号            id
+功能名称      functionName
+路径              url
+父模块编号  parentId
+
+角色-功能关联表
+编号             id
+角色编号     roleId
+功能编号     functionId
+功能名称      functionName
+路径             url
+
+
+部门表        department
+   部门编号   id
+   部门名称   departmentName 
+   部门描述   desc
+   
+供应商表       supplier
+   编号        id
+   全称        fullName
+   简称        shorName
+   地址        address
+   联系电话    phone
+   开户行      bank
+   开户所在地  bankAddr
+   银行卡帐号  bankCard 
+
+
+商品 类型表   Category
+   类型编号   id
+   类型名称   categoryName
+      父类    parentId     一级父类编号为0
+
+
+商品基本信息表 Goods
+   商品编号    id
+   商品名称    goodsName
+   商品编码    goodsNo (可选商品首字母 比如 矿泉水  kqs) 
+   商品单价    price
+   规格型号    specModel
+   单位        spec
+   可否为小数  isDecimal  0 否  1 是
+   商品类型    goodsType  1.物资 2.固定资产
+   所属大类    categoryOne
+   所属小类    categoryTwo
+   所属供应商  supplierId
+
+   
+
+计划表(部门月计划表) DepartPlan
+   计划编号    id
+   部门编号    departmentId
+   创建日期    createDate
+   总金额      sumPrice
+   备注        remarks
+
+计划物资申请表  MaterialApply
+   编号        id
+   计划编号    planId
+   商品编号    goodsId
+   单价        price
+   商品数量    goodsNum
+   金额        singlePrice
+
+商品库存表
+   编号              id
+   商品编号      goodsId
+   商品价格      goodsPrice
+   数量             stockNum   
+   物资类型      goodsType  1.物资  2.固定资产
+   库存类型      stockType  1.预存  2.调拨
+   备注             remarks     
+
+入库单 表(采购表  1.预存 2.调拨)  storage
+    编号         id
+   入库编号      storageNo
+   供应商编号    supplierId
+   入库日期      storageDate
+   入库物资金额  storageMoney
+   入库类型      storageType    1.预存 2.调拨
+   签收部门      signDepart
+   签收员姓名    signName
+   备注          remarks
+   
+入库物资表
+    编号         id
+    入库编号     storageId
+    入库商品     goodsId 
+   商品单价     goodsPrice
+    入库数量     goodsNum
+    金额         singleMoney
+
+部门领用表       departUse
+   编号             id
+   领用编码      useNo
+   领用日期      useDate
+   领用部门      departmentId
+   总金额        sumMoney
+   备注          remarks
+   
+   
+部门物资调拨表
+   编号           id
+   调拨编号   allotNo
+   部门编号   departId
+   调拨日期   allotDate
+   总金额     sumMoney
+   备注       remarks
+
+
+领用/调拨物资表
+   编号                         id
+   领用/调拨单编号          useAlloctNo
+   物资编号                 goodsId
+   物资名称                 goodsName
+   品牌型号                goodsType
+   单位                       spec 
+   数量                       num
+   商品所属大类             categoryOne
+   商品所属小类             categoryTwo
+   单价                      price
+    金额                     sunMoney
+   供应商编号               supplierId
+   供应商名称               supplierName
+   类型                     type   1.领用   2.调拨
+
+
+登录日志表
+  编号          id
+  用户编号      userId
+  登录用户名    userName 
+  登录时间      loginTime
+  状态          status    1 正在登录  0 未登录
+
+
+
+
+
+ 

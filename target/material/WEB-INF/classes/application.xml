@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans-3.0.xsd 
+         http://www.springframework.org/schema/context
+         http://www.springframework.org/schema/context/spring-context-3.0.xsd
+         http://www.springframework.org/schema/aop
+         http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+         http://www.springframework.org/schema/tx 
+         http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+   <!-- 引入quartz定时执行任务 -->
+   <import resource="spring-quartz.xml"/>
+	<!-- 打开Spring的Annotation支持 -->
+	<context:annotation-config />
+	<context:component-scan base-package="com.material.website" />
+	<context:property-placeholder location="classpath*:jdbc.properties"
+		ignore-unresolvable="true" />
+	<context:property-placeholder location="classpath*:javamail.properties"
+		ignore-unresolvable="true" />
+		
+	<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="${mail.host}" />
+		<property name="username" value="${send.username}" />
+		<property name="password" value="${send.password}" />
+		<property name="protocol" value="${mail.protocol}" />
+		<property name="defaultEncoding" value="${mail.defaultEncoding}" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">${mail.smtp.auth}</prop>
+				<prop key="mail.debug">${mail.debug}</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="MyExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<!--
+			corePoolSize： 线程池维护线程的最少数量
+			keepAliveSeconds  线程池维护线程所允许的空闲时间
+			maxPoolSize   线程池维护线程的最大数量
+			queueCapacity 线程池所使用的缓冲队列
+		-->
+		<property name="corePoolSize" value="20" />
+		<property name="keepAliveSeconds" value="60" />
+		<property name="maxPoolSize" value="200" />
+		<property name="queueCapacity" value="100" />
+	</bean> 
+
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${jdbc.driverClassName}" />
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="initialSize" value="30" />
+		<property name="minIdle" value="10" />
+		<property name="maxActive" value="600" />
+		<property name="maxIdle" value="50" />
+		<property name="maxWait" value="50" />
+	</bean>
+	<!-- hibernate4整合没有提供专门的针对Annotation的类，直接在LocalSessionFactoryBean中已经集成 -->
+	<!--创建SessionFactory工厂 -->
+	<bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<!-- 注入数据源 -->
+		<property name="dataSource" ref="dataSource" />
+		<!-- 设置Spring扫描实体类 -->
+		<property name="packagesToScan">
+			<value>com.material.website.entity</value>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">false</prop>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.format_sql">false</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- 配置Spring的事务处理 -->
+	<!-- 创建事务管理器 -->
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<!-- 配置AOP，Spring是通过AOP来进行事务管理的 -->
+	<aop:config>
+		<!-- 设置pointCut表示哪些方法要加入事务处理 -->
+		<!-- 以下的事务是声明在DAO中，但是通常都会在Service来处理多个业务对象逻辑的关系，注入删除，更新等，此时如果在执行了一个步骤之后抛出异常 
+			就会导致数据不完整，所以事务不应该在DAO层处理，而应该在service，这也就是Spring所提供的一个非常方便的工具，声明式事务 -->
+		<aop:pointcut id="allMethods"
+			expression="execution(* com.material.website.service.impl.*.*(..))" />
+		<!-- 通过advisor来确定具体要加入事务控制的方法 -->
+		<aop:advisor advice-ref="txAdvice" pointcut-ref="allMethods" />
+	</aop:config>
+	<!-- 配置哪些方法要加入事务控制 -->
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+		<tx:attributes>
+			<!-- 让所有的方法都加入事务管理，为了提高效率，可以把一些查询之类的方法设置为只读的事务 -->
+			<tx:method name="*" propagation="REQUIRED" read-only="true" />
+			<!-- 以下方法都是可能涉及修改的方法，就无法设置为只读 -->
+			<tx:method name="add*" propagation="REQUIRED" />
+			<tx:method name="insert*" propagation="REQUIRED" />
+			<tx:method name="del*" propagation="REQUIRED" />
+			<tx:method name="update*" propagation="REQUIRED" />
+			<tx:method name="save*" propagation="REQUIRED" />
+			<tx:method name="clear*" propagation="REQUIRED" />
+			<tx:method name="remove*" propagation="REQUIRED" />
+			<tx:method name="renew*" propagation="REQUIRED" />
+			<tx:method name="bind*" propagation="REQUIRED" />
+			<tx:method name="cancel*" propagation="REQUIRED" />
+			<tx:method name="recommand*" propagation="REQUIRED" />
+			<tx:method name="mount*" propagation="REQUIRED" />
+			<tx:method name="un*" propagation="REQUIRED" />
+			<tx:method name="login*" propagation="REQUIRED" />
+			<tx:method name="logout*" propagation="REQUIRED" />
+			<tx:method name="create*" propagation="REQUIRED" />
+			<tx:method name="audit*" propagation="REQUIRED" />
+			<tx:method name="register*" propagation="REQUIRED" />
+			<tx:method name="search*" propagation="REQUIRED" />
+			<tx:method name="download*" propagation="REQUIRED" />
+			<tx:method name="upload*" propagation="REQUIRED" />
+			<tx:method name="free*" propagation="REQUIRED" />
+			<tx:method name="recover*" propagation="REQUIRED" />
+			<tx:method name="publish*" propagation="REQUIRED" />
+			<tx:method name="exchange*" propagation="REQUIRED" />
+		</tx:attributes>
+	</tx:advice>
+</beans>

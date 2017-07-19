@@ -1,0 +1,2 @@
+1.初始化超级管理员功能权限信息
+INSERT INTO rolefunction (functionid,functionname,url,roleId)  SELECT f.id as functionId,f.functionName,f.url,(SELECT id from role where roleName='超级管理员') as roleId   FROM function as f where 1=1 and f.paretId=0

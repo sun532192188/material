@@ -1,0 +1,11 @@
+#\u7528\u6237\u5141\u8bb8\u767b\u5f55\u8bbe\u5907\u6570\u91cf
+user.login.num=8
+#\u56fe\u7247\u4fdd\u5b58\u8def\u5f84
+static.path = /upload
+#\u9644\u4ef6\u4fdd\u5b58\u8def\u5f84
+dynamic.path = /upload
+#\u8d44\u8baf\u7f6e\u9876\u6570
+info.isTop=5
+#\u7528\u6237\u8BBF\u95EE\u8DEF\u5F84\u524D\u7F00
+system.url=http://127.0.0.1:8080/material/
+#system.url=http://35.163.61.79:8080/material/
